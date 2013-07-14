@@ -1,0 +1,9 @@
+Building gil
+
+See doc/readme-qt.rst for instructions on building gil-QT,
+the intended-for-end-users, nice-graphical-interface, reference
+implementation of gil.
+
+See doc/build-*.txt for instructions on building gild,
+the intended-for-services, no-graphical-interface, reference
+implementation of gil.
