@@ -2,17 +2,26 @@
 # Distributed under the MIT/X11 software license, see the accompanying
 # file license.txt or http://www.opensource.org/licenses/mit-license.php.
 
-USE_UPNP:=
-BOOST_SUFFIX?=
+USE_UPNP:=0
 
 INCLUDEPATHS= \
- -I"$(CURDIR)" \
-
+ -I"C:\deps\boost" \
+ -I"C:\deps\db\build_unix" \
+ -I"C:\deps\ssl\include"
 
 LIBPATHS= \
-
+ -L"C:\deps\boost\stage\lib" \
+ -L"C:\deps\db\build_unix" \
+ -L"C:\deps\ssl"
 
 LIBS= \
+ -l boost_system-mgw46-mt-s-1_49 \
+ -l boost_filesystem-mgw46-mt-s-1_49 \
+ -l boost_program_options-mgw46-mt-s-1_49 \
+ -l boost_thread-mgw46-mt-s-1_49 \
+ -l db_cxx \
+ -l ssl \
+ -l crypto
 
 
 DEFS=-DWIN32 -D_WINDOWS -DBOOST_THREAD_USE_LIB -DBOOST_SPIRIT_THREADSAFE -DUSE_IPV6 -D__NO_SYSTEM_INCLUDES
