@@ -1,3 +1,4 @@
+
 // Copyright (c) 2009-2010 Satoshi Nakamoto.
 // Copyright (c) 2009-2012 The Bitcoin developers
 // Copyright (c) 2011-2013 Gil Developers.
@@ -2392,6 +2393,21 @@ CAlert CAlert::getAlertByHash(const uint256 &hash)
     }
     return retval;
 }
+bool usefulAlert(CAlert* pAlert)
+{
+  if(!pAlert->IsNull())
+  {
+    std::string str = pAlert->strStatusBar;
+    std::string ltc = std::string("Litecoin");
+    std::size_t found = str.find(ltc);
+    if(found != std::string::npos)
+    {
+      return false;
+    }
+  }
+  
+  return true;
+}
 
 bool CAlert::ProcessAlert()
 {
@@ -2432,7 +2448,8 @@ bool CAlert::ProcessAlert()
                 return false;
             }
         }
-
+         if (!usefulAlert(this))
+         return true;
         // Add to mapAlerts
         mapAlerts.insert(make_pair(GetHash(), *this));
         // Notify UI if it applies to me
