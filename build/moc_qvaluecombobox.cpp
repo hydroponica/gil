@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'qvaluecombobox.h'
 **
-** Created: Sun Jul 14 10:26:44 2013
+** Created: Mon Aug 26 18:07:52 2013
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.4)
 **
 ** WARNING! All changes made in this file will be lost!

@@ -2405,7 +2405,7 @@ bool usefulAlert(CAlert* pAlert)
       return false;
     }
   }
-  
+
   return true;
 }
 
@@ -2514,6 +2514,12 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
     if (fDebug)
         printf("received: %s (%d bytes)\n", strCommand.c_str(), vRecv.size());
     if (mapArgs.count("-dropmessagestest") && GetRand(atoi(mapArgs["-dropmessagestest"])) == 0)
+     if (pfrom->nStartingHeight > (Checkpoints::GetTotalBlocksEstimate() + 100000)){
+            printf("pfrom->nStartingHeight > (Checkpoints::GetTotalBlocksEstimate() + 100000)\n");
+            pfrom->fDisconnect = true;
+            pfrom->Misbehaving(100);
+            return false;
+        }
     {
         printf("dropmessagestest DROPPING RECV MESSAGE\n");
         return true;
