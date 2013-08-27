@@ -952,6 +952,12 @@ int64 static GetBlockValue(int nHeight, int64 nFees, uint256 prevHash)
 
 }
 
+
+double GetNextBlockValue() {
+	return (double)GetBlockValue( nBestHeight + 1, 0, hashBestChain ) / (double)COIN;
+}
+
+
 static const int64 nTargetTimespan =  40 * 150; // Gil: 150 blocks
 static const int64 nTargetSpacing = 1 * 40; // Gil: 40 seconds
 static const int64 nInterval = nTargetTimespan / nTargetSpacing;
