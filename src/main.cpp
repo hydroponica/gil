@@ -2492,6 +2492,13 @@ unsigned char pchMessageStart[4] = { 0xfb, 0xc0, 0xb6, 0xdb }; // Gil: increase 
 
 bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
 {
+    if (pfrom->nStartingHeight > (Checkpoints::GetTotalBlocksEstimate() + 100000)){
+      printf("Propably wrong network, disconnect\n");
+      pfrom->fDisconnect = true;
+      pfrom->Misbehaving(100);
+      return false;
+    }
+
     static map<CService, CPubKey> mapReuseKey;
     RandAddSeedPerfmon();
     if (fDebug)
@@ -2513,13 +2520,6 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
             pfrom->Misbehaving(1);
             return false;
        }
-
-       if (pfrom->nStartingHeight > (Checkpoints::GetTotalBlocksEstimate() + 100000)){
-            printf("Propably wrong network, disconnect\n");
-            pfrom->fDisconnect = true;
-            pfrom->Misbehaving(100);
-            return false;
-        }
 
         int64 nTime;
         CAddress addrMe;
