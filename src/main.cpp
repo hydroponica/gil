@@ -2393,21 +2393,6 @@ CAlert CAlert::getAlertByHash(const uint256 &hash)
     }
     return retval;
 }
-bool usefulAlert(CAlert* pAlert)
-{
-  if(!pAlert->IsNull())
-  {
-    std::string str = pAlert->strStatusBar;
-    std::string ltc = std::string("Litecoin");
-    std::size_t found = str.find(ltc);
-    if(found != std::string::npos)
-    {
-      return false;
-    }
-  }
-
-  return true;
-}
 
 bool CAlert::ProcessAlert()
 {
@@ -2448,8 +2433,6 @@ bool CAlert::ProcessAlert()
                 return false;
             }
         }
-         if (!usefulAlert(this))
-         return true;
         // Add to mapAlerts
         mapAlerts.insert(make_pair(GetHash(), *this));
         // Notify UI if it applies to me
@@ -2514,12 +2497,6 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
     if (fDebug)
         printf("received: %s (%d bytes)\n", strCommand.c_str(), vRecv.size());
     if (mapArgs.count("-dropmessagestest") && GetRand(atoi(mapArgs["-dropmessagestest"])) == 0)
-     if (pfrom->nStartingHeight > (Checkpoints::GetTotalBlocksEstimate() + 100000)){
-            printf("pfrom->nStartingHeight > (Checkpoints::GetTotalBlocksEstimate() + 100000)\n");
-            pfrom->fDisconnect = true;
-            pfrom->Misbehaving(100);
-            return false;
-        }
     {
         printf("dropmessagestest DROPPING RECV MESSAGE\n");
         return true;
@@ -2532,9 +2509,15 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
     if (strCommand == "version")
     {
         // Each connection can only send one version message
-        if (pfrom->nVersion != 0)
-        {
+       if (pfrom->nVersion != 0) {
             pfrom->Misbehaving(1);
+            return false;
+       }
+
+       if (pfrom->nStartingHeight > (Checkpoints::GetTotalBlocksEstimate() + 100000)){
+            printf("Propably wrong network, disconnect\n");
+            pfrom->fDisconnect = true;
+            pfrom->Misbehaving(100);
             return false;
         }
 
