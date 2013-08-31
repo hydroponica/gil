@@ -568,6 +568,12 @@ bool AppInit2()
         }
     }
 
+//    printf("%i, %i\n",magicNumberSwitchOverTime, GetTime());
+    if (magicNumberSwitchOverTime < GetTime()){
+//      printf("magicNumberSwitchOverTime < GetTime()\n");
+      memcpy(pchMessageStart, newpchMessageStart,sizeof(pchMessageStart));
+    }
+
     BOOST_FOREACH(string strDest, mapMultiArgs["-seednode"])
         AddOneShot(strDest);
 

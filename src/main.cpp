@@ -1,4 +1,3 @@
-
 // Copyright (c) 2009-2010 Satoshi Nakamoto.
 // Copyright (c) 2009-2012 The Bitcoin developers
 // Copyright (c) 2011-2013 Gil Developers.
@@ -69,6 +68,7 @@ int64 nHPSTimerStart;
 int64 nTransactionFee = 0;
 int64 nMinimumInputValue = CENT / 100;
 
+unsigned int tmpMagicNumbernTime = 0;
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -2021,6 +2021,19 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
         mapOrphanBlocksByPrev.erase(hashPrev);
     }
 
+/*    printf ("magicnumber debug: %i, %i, %i\n",tmpMagicNumbernTime,pblock->nTime,magicNumberSwitchOverTime);
+    printf ("pchmessagestart: ");
+    unsigned int i;
+    for (i = 0; i < sizeof(pchMessageStart); i++)
+    {
+      if (i > 0) printf(":");
+      printf("%02X", pchMessageStart[i]);
+    }
+    printf("\n");*/
+    if ((tmpMagicNumbernTime == 0) && (pblock->nTime > magicNumberSwitchOverTime)){
+        tmpMagicNumbernTime = GetTime();
+    }  
+
     printf("ProcessBlock: ACCEPTED\n");
     return true;
 }
@@ -2493,16 +2506,19 @@ bool static AlreadyHave(CTxDB& txdb, const CInv& inv)
 // The message start string is designed to be unlikely to occur in normal data.
 // The characters are rarely used upper ascii, not valid as UTF-8, and produce
 // a large 4-byte int at any alignment.
+unsigned char newpchMessageStart[4] = { 0xfc, 0xc0, 0xb8, 0xdb }; // Gil: increase each by adding 2 to bitcoin's value.
 unsigned char pchMessageStart[4] = { 0xfb, 0xc0, 0xb6, 0xdb }; // Gil: increase each by adding 2 to bitcoin's value.
 
 
 bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
 {
-    if (pfrom->nStartingHeight > (Checkpoints::GetTotalBlocksEstimate() + 100000)){
-      printf("Propably wrong network, disconnect\n");
-      pfrom->fDisconnect = true;
-      pfrom->Misbehaving(100);
-      return false;
+    if (pchMessageStart[0] != newpchMessageStart[0]){
+      if (pfrom->strSubVer.find("Satoshi") != std::string::npos || (pfrom->nStartingHeight > (Checkpoints::GetTotalBlocksEstimate() + 100000))){
+        printf("Wrong network, disconnect\n");
+        pfrom->fDisconnect = true;
+        pfrom->Misbehaving(100);
+        return false;
+      }
     }
 
     static map<CService, CPubKey> mapReuseKey;
