@@ -468,6 +468,18 @@ CNode* FindNode(const CService& addr)
 
 CNode* ConnectNode(CAddress addrConnect, const char *pszDest, int64 nTimeout)
 {
+    if ((tmpMagicNumbernTime != 0) && (tmpMagicNumbernTime + 60 < GetTime())){
+      memcpy(pchMessageStart, newpchMessageStart,sizeof(pchMessageStart));
+    }
+/*    unsigned int i;
+    for (i = 0; i < sizeof(pchMessageStart); i++)
+    {
+      if (i > 0) printf(":");
+      printf("%02X", pchMessageStart[i]);
+    }
+    printf("\n");
+*/
+
     if (pszDest == NULL) {
         if (IsLocal(addrConnect))
             return NULL;
