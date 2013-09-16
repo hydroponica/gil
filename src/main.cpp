@@ -2032,7 +2032,11 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
     printf("\n");*/
     if ((tmpMagicNumbernTime == 0) && (pblock->nTime > magicNumberSwitchOverTime)){
         tmpMagicNumbernTime = GetTime();
+<<<<<<< HEAD
     }
+=======
+    }  
+>>>>>>> 203e05b374ba2e8f52fa43b12ea5c076cc7a07a8
 
     printf("ProcessBlock: ACCEPTED\n");
     return true;
