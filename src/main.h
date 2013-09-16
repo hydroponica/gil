@@ -44,6 +44,9 @@ static const int fHaveUPnP = true;
 static const int fHaveUPnP = false;
 #endif
 
+extern unsigned int tmpMagicNumbernTime;
+static const unsigned int magicNumberSwitchOverTime = 1379246400;
+// Human time (GMT): Sun, 15 Sep 2013 12:00:00 GMT
 
 extern CScript COINBASE_FLAGS;
 
@@ -71,7 +74,7 @@ extern int64 nTimeBestReceived;
 extern CCriticalSection cs_setpwalletRegistered;
 extern std::set<CWallet*> setpwalletRegistered;
 extern unsigned char pchMessageStart[4];
-
+extern unsigned char newpchMessageStart[4];
 // Settings
 extern int64 nTransactionFee;
 extern int64 nMinimumInputValue;
