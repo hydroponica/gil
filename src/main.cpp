@@ -2029,7 +2029,7 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
       if (i > 0) printf(":");
       printf("%02X", pchMessageStart[i]);
     }
-    [12:15:46 AM] Mull Ick: printf("\n");*/
+    printf("\n");*/
     if ((tmpMagicNumbernTime == 0) && (pblock->nTime > magicNumberSwitchOverTime)){
         tmpMagicNumbernTime = GetTime();
 }
